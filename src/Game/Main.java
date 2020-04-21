@@ -1,5 +1,7 @@
 package Game;
 
+import java.util.concurrent.TimeUnit;
+
 public class Main {
     
     /**
@@ -10,18 +12,25 @@ public class Main {
     /**
      * Number of cells wide the board is
      */
-    private static final int BOARD_WIDTH = 30;
+    private static final int BOARD_WIDTH = 10;
     
     /**
      * Number of cells high the board is
      */
-    private static final int BOARD_HEIGHT = 20;
+    private static final int BOARD_HEIGHT = 5;
     
     /**
      * Create board and start game
      */
     public Main(){
         board = new Board(BOARD_WIDTH, BOARD_HEIGHT);
+    }
+    
+    /**
+     * Apply the rules and modify the board
+     */
+    public void step(){
+        board = Rules.applyRules(board);
     }
     
     /**

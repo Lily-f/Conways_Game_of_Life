@@ -74,6 +74,8 @@ public class Board {
      */
     public int aliveAdjacentCells(int x, int y){
         int numAlive = 0;
+        
+        // Check not out of array bounds
         if(x > 0){
             if(getCell(x - 1, y).isAlive()) numAlive ++;
             if(y > 0 && getCell(x - 1, y - 1).isAlive())    numAlive ++;
@@ -88,6 +90,16 @@ public class Board {
         if(y < getHeight() - 1 && getCell(x, y + 1).isAlive()) numAlive ++;
         
         return numAlive;
+    }
+    
+    /**
+     * Sets the life of a given cell
+     * @param x X coordinate of cell
+     * @param y Y coordinate of cell
+     */
+    public void setCellLife(int x, int y, int life){
+        if(life > Cell.ALIVE || life < Cell.DEAD) throw new IllegalArgumentException("Life value has to be between [0,9] inclusive");
+        cells[x][y].setLife(life);
     }
     
 }

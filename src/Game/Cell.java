@@ -6,6 +6,16 @@ package Game;
 public class Cell {
     
     /**
+     * int value of life where cell is completely alive
+     */
+    public static final int ALIVE = 9;
+    
+    /**
+     * int value of life where cell is dead
+     */
+    public static final int DEAD = 0;
+    
+    /**
      * Life value range [0,9] where 0 is dead and 9 is completely healthy
      */
     private int life;
@@ -14,7 +24,7 @@ public class Cell {
      * Creates a new cell, starts dead
      */
     public Cell(){
-        this.life = 0;
+        this.life = DEAD;
     }
     
     /**
@@ -37,29 +47,29 @@ public class Cell {
      * Increase the cells life value
      */
     public void increaseLife(){
-        if(life != 9) life ++;
+        if(life != ALIVE) life ++;
     }
     
     /**
      * Decrease the cells life value
      */
     public void decreaseLife(){
-        if(life != 0) life --;
+        if(life != DEAD) life --;
     }
     
     /**
      * Check if cell is Alive
-     * @return boolean, true is life isn't 0
+     * @return boolean, true is life isn't dead
      */
     public boolean isAlive(){
-        return life != 0;
+        return life != DEAD;
     }
     
     /**
      * Check if cell is dead
-     * @return boolean, true if life is 0
+     * @return boolean, true if life is dead
      */
     public boolean isDead(){
-        return life == 0;
+        return life == DEAD;
     }
 }
