@@ -43,28 +43,14 @@ public class GameTests {
         assert board.getCell(2, 1).isAlive();
         
         //Display the old board
-        String message = "===Step 0===\n";
-        for(int y = 0; y < 3; y ++){
-            for(int x = 0; x < 3; x ++){
-                message += board.getCell(x, y).toString() + " ";
-            }
-            message += "\n";
-        }
-        System.out.println(message);
+        System.out.println("===Step 0===\n" + board.toString());
         
         // Run the rules on the board
         main.step();
         Board newBoard = main.getBoard();
         
         //display the new board
-        message = "\n===Step 1===\n";
-        for(int y = 0; y < 3; y ++){
-            for(int x = 0; x < 3; x ++){
-                message += newBoard.getCell(x, y).toString() + " ";
-            }
-            message += "\n";
-        }
-        System.out.println(message);
+        System.out.println("\n===Step 1===\n" + newBoard.toString());
         
         // Check the rules haven't changed the old board
         assert board.getCell(0, 1).isAlive();

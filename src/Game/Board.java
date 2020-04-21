@@ -1,5 +1,7 @@
 package Game;
 
+import java.util.Arrays;
+
 /**
  * Represents the 2d array of cells
  */
@@ -100,4 +102,19 @@ public class Board {
         cells[x][y].setLife(life);
     }
     
+    @Override
+    public String toString() {
+        StringBuilder string = new StringBuilder();
+        string.append("Board{\n");
+        
+        for(int y = 0; y < getHeight(); y ++){
+            for(int x = 0; x < getWidth(); x ++){
+                string.append(cells[x][y].toString());
+            }
+            string.append('\n');
+        }
+        
+        string.append("}");
+        return string.toString();
+    }
 }
