@@ -1,3 +1,4 @@
+import Game.Board;
 import Game.Cell;
 import Game.Main;
 import org.junit.jupiter.api.Test;
@@ -13,10 +14,10 @@ public class GameTests {
     @Test
     void correctBoardCreation(){
         Main main = new Main();
-        Cell[][] board = main.getBoard();
-        for(Cell[] column : board){
-            for(Cell cell : column){
-                assert cell.isDead();
+        Board board = main.getBoard();
+        for(int x = 0; x < board.getWidth(); x ++){
+            for(int y = 0; y < board.getHeight(); y ++){
+                assert board.getCell(x, y).isDead();
             }
         }
         

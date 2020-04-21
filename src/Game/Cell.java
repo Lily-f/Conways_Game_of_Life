@@ -18,6 +18,14 @@ public class Cell {
     }
     
     /**
+     * Clone a cell
+     * @param cell cell to clone
+     */
+    public Cell(Cell cell){
+        this.life = cell.life;
+    }
+    
+    /**
      * Set new value for cells life
      * @param life int New life value
      */
@@ -49,9 +57,9 @@ public class Cell {
     
     /**
      * Check if cell is dead
-     * @return boolean, true if life isn't 9
+     * @return boolean, true if life is 0
      */
     public boolean isDead(){
-        return life != 9;
+        return life == 0;
     }
 }

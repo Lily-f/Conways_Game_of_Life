@@ -5,12 +5,12 @@ public class Main {
     /**
      * Board is 2d array of cells
      */
-    private final Cell[][] board;
+    private Board board;
     
     /**
      * Number of cells wide the board is
      */
-    private static final int BOARD_WIDTH = 20;
+    private static final int BOARD_WIDTH = 30;
     
     /**
      * Number of cells high the board is
@@ -21,22 +21,15 @@ public class Main {
      * Create board and start game
      */
     public Main(){
-        
-        // Create and fill board with cells
-        board = new Cell[BOARD_WIDTH][BOARD_HEIGHT];
-        for(int x = 0; x < BOARD_WIDTH; x++){
-            for(int y = 0; y < BOARD_HEIGHT; y++){
-                board[x][y] = new Cell();
-            }
-        }
+        board = new Board(BOARD_WIDTH, BOARD_HEIGHT);
     }
     
     /**
      * Defensively clone board and return
      * @return 2D array of cells
      */
-    public Cell[][] getBoard() {
-        return board;
+    public Board getBoard() {
+        return new Board(board);
     }
     
     /**
