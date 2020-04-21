@@ -1,7 +1,7 @@
 package Game;
 
 /**
- *
+ * Represents the 2d array of cells
  */
 public class Board {
     
@@ -64,6 +64,30 @@ public class Board {
      */
     public int getHeight(){
         return cells[0].length;
+    }
+    
+    /**
+     * Find the number of alive adjacent cells from a given cell
+     * @param x X coordinate of cell
+     * @param y Y coordinate of cell
+     * @return int number of alive adjacent cells
+     */
+    public int aliveAdjacentCells(int x, int y){
+        int numAlive = 0;
+        if(x > 0){
+            if(getCell(x - 1, y).isAlive()) numAlive ++;
+            if(y > 0 && getCell(x - 1, y - 1).isAlive())    numAlive ++;
+            if(y < getHeight() - 1 && getCell(x - 1, y + 1).isAlive()) numAlive ++;
+        }
+        if(x < getWidth() -1){
+            if(getCell(x + 1, y).isAlive()) numAlive ++;
+            if(y > 0 && getCell(x + 1, y - 1).isAlive())    numAlive ++;
+            if(y < getHeight() - 1 && getCell(x + 1, y + 1).isAlive()) numAlive ++;
+        }
+        if(y > 0 && getCell(x, y - 1).isAlive())   numAlive ++;
+        if(y < getHeight() - 1 && getCell(x, y + 1).isAlive()) numAlive ++;
+        
+        return numAlive;
     }
     
 }

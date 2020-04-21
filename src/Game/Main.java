@@ -25,7 +25,7 @@ public class Main {
     }
     
     /**
-     * Defensively clone board and return
+     * Defensively clone board and return. Note: Defensively cloned
      * @return 2D array of cells
      */
     public Board getBoard() {
