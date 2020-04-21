@@ -1,5 +1,6 @@
 package Game;
 
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
@@ -10,20 +11,10 @@ public class Main {
     private Board board;
     
     /**
-     * Number of cells wide the board is
-     */
-    private static final int BOARD_WIDTH = 10;
-    
-    /**
-     * Number of cells high the board is
-     */
-    private static final int BOARD_HEIGHT = 5;
-    
-    /**
      * Create board and start game
      */
-    public Main(){
-        board = new Board(BOARD_WIDTH, BOARD_HEIGHT);
+    public Main(int width, int height){
+        board = new Board(width, height);
     }
     
     /**
@@ -34,11 +25,11 @@ public class Main {
     }
     
     /**
-     * Defensively clone board and return. Note: Defensively cloned
+     * Get game board
      * @return 2D array of cells
      */
     public Board getBoard() {
-        return new Board(board);
+        return board;
     }
     
     /**
@@ -46,7 +37,13 @@ public class Main {
      * @param args start arguments
      */
     public static void main(String[] args) {
-        new Main();
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.println("Enter the board width");
+        int width = scanner.nextInt();
+        System.out.println("Enter the board height");
+        int height = scanner.nextInt();
+        new Main(width, height);
     }
 
 }

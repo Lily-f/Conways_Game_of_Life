@@ -72,4 +72,9 @@ public class Cell {
     public boolean isDead(){
         return life == DEAD;
     }
+    
+    @Override
+    public String toString() {
+        return "Cell{" + "life=" + life + '}';
+    }
 }

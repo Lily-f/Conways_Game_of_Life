@@ -76,18 +76,16 @@ public class Board {
         int numAlive = 0;
         
         // Check not out of array bounds
-        if(x > 0){
-            if(getCell(x - 1, y).isAlive()) numAlive ++;
-            if(y > 0 && getCell(x - 1, y - 1).isAlive())    numAlive ++;
-            if(y < getHeight() - 1 && getCell(x - 1, y + 1).isAlive()) numAlive ++;
-        }
-        if(x < getWidth() -1){
-            if(getCell(x + 1, y).isAlive()) numAlive ++;
-            if(y > 0 && getCell(x + 1, y - 1).isAlive())    numAlive ++;
-            if(y < getHeight() - 1 && getCell(x + 1, y + 1).isAlive()) numAlive ++;
-        }
-        if(y > 0 && getCell(x, y - 1).isAlive())   numAlive ++;
-        if(y < getHeight() - 1 && getCell(x, y + 1).isAlive()) numAlive ++;
+        if(x > 0 && y > 0 && getCell(x-1, y-1).isAlive()) numAlive ++;
+        if(y > 0 && getCell(x, y-1).isAlive()) numAlive ++;
+        if(x < getWidth()-1 && y > 0 && getCell(x+1, y-1).isAlive()) numAlive ++;
+        
+        if(x > 0 && getCell(x-1, y).isAlive()) numAlive ++;
+        if(x < getWidth()-1 && getCell(x+1, y).isAlive()) numAlive ++;
+        
+        if(x > 0 && y < getHeight()-1 && getCell(x-1, y+1).isAlive()) numAlive ++;
+        if(y < getHeight()-1 && getCell(x, y+1).isAlive()) numAlive ++;
+        if(x < getWidth()-1 && y < getHeight()-1 && getCell(x+1, y+1).isAlive()) numAlive ++;
         
         return numAlive;
     }
