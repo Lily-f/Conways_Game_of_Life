@@ -85,6 +85,17 @@ public class Board {
     }
     
     /**
+     * Set all cells to dead
+     */
+    public void clearCells(){
+        for(int x = 0; x < getWidth(); x ++){
+            for(int y = 0; y < getHeight(); y ++){
+                cells[x][y].setLife(Cell.DEAD);
+            }
+        }
+    }
+    
+    /**
      * Apply the rules and modify the board
      */
     public void step(){

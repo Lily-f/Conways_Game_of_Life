@@ -37,12 +37,12 @@ public class Gui extends Application {
     /**
      * Initial width of game board
      */
-    private static final int DEFAULT_BOARD_WIDTH = 20;
+    private static final int DEFAULT_BOARD_WIDTH = 40;
     
     /**
      * Initial height of game board
      */
-    private static final int DEFAULT_BOARD_HEIGHT = 10;
+    private static final int DEFAULT_BOARD_HEIGHT = 40;
     
     /**
      * Delay between steps for board animation
@@ -71,6 +71,7 @@ public class Gui extends Application {
         primaryStage.getIcons().add(new Image("file:res/icon.png"));
         primaryStage.setResizable(true);
         primaryStage.setMinWidth(MIN_WINDOW_WIDTH);
+        primaryStage.setOnCloseRequest((e)->System.exit(0));
         
         board = new Board(DEFAULT_BOARD_WIDTH, DEFAULT_BOARD_HEIGHT);
         
@@ -89,6 +90,7 @@ public class Gui extends Application {
         
         primaryStage.setScene(new Scene(rootPane, 300, 200));
         primaryStage.show();
+        updateBoard();
     }
     
     /**
@@ -131,6 +133,18 @@ public class Gui extends Application {
         Button pauseBtn = new Button("Pause");
         pauseBtn.setOnAction((e) -> running = false);
         menu.add(pauseBtn, 2, 0);
+        
+        // Clear board
+        Button clearBtn = new Button("Clear Board");
+        clearBtn.setOnAction((e) -> {
+            board.clearCells();
+            updateBoard();
+        });
+        menu.add(clearBtn, 3, 0);
+        
+        // todo Change size
+        
+        // todo Load?
     }
     
     /**
@@ -155,7 +169,9 @@ public class Gui extends Application {
             if(clickedNode == null || clickedNode == boardGrid) return;
             int x = GridPane.getColumnIndex(clickedNode);
             int y = GridPane.getRowIndex(clickedNode);
-            board.setCellLife(x, y, Cell.ALIVE);
+            if(board.getCell(x,y).isAlive()) board.setCellLife(x,y, Cell.DEAD);
+            else board.setCellLife(x, y, Cell.ALIVE);
+            
             updateBoard();
         });
     }
@@ -166,7 +182,6 @@ public class Gui extends Application {
     private void updateBoard(){
         
         boolean cellsAlive = false;
-        
         ObservableList<Node> cellBoxes = boardGrid.getChildren();
         for (Node cellBox : cellBoxes) {
             int x = GridPane.getColumnIndex(cellBox);
@@ -183,5 +198,9 @@ public class Gui extends Application {
         
         // Pause the game if no cells are alive
         if(!cellsAlive) running = false;
+        
+        // Show if game is paused
+        if(!running)    boardGrid.setStyle("-fx-background-color: #FFB0B0");
+        else    boardGrid.setStyle("-fx-background-color: #A0A0A0");
     }
 }
