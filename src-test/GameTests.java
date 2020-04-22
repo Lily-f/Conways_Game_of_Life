@@ -37,13 +37,9 @@ public class GameTests {
         assert board.getCell(1, 1).isAlive();
         assert board.getCell(2, 1).isAlive();
         
-        System.out.println(board.toString());
-        
         // Run the rules on the board
         board.step();
         
-        
-        System.out.println("\n" + board.toString());
         // Check death by isolation is correct
         assert board.getCell(0, 1).isDead();
         assert board.getCell(2, 1).isDead();
