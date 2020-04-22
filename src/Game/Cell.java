@@ -23,8 +23,8 @@ public class Cell {
     /**
      * Creates a new cell, starts dead
      */
-    public Cell(){
-        this.life = DEAD;
+    public Cell(int life){
+        this.life = life;
     }
     
     /**
