@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- *
+ * Tests on the integrity of game rules and other backend
  */
 public class GameTests {
     
@@ -42,15 +42,9 @@ public class GameTests {
         assert board.getCell(1, 1).isAlive();
         assert board.getCell(2, 1).isAlive();
         
-        //Display the old board
-        System.out.println("===Step 0===\n" + board.toString());
-        
         // Run the rules on the board
         main.step();
         Board newBoard = main.getBoard();
-        
-        //display the new board
-        System.out.println("\n===Step 1===\n" + newBoard.toString());
         
         // Check the rules haven't changed the old board
         assert board.getCell(0, 1).isAlive();
@@ -69,6 +63,44 @@ public class GameTests {
         
         // Check survival is correct
         assert newBoard.getCell(1, 1).isAlive();
+    }
+    
+    /**
+     * A cell with 4 or more neighbours should die from overpopulation
+     */
+    @Test
+    void correctCellDeath(){
+        Main main = new Main(3,3);
+        Board board = main.getBoard();
+    
+        //set a horizontal line 3,2 size of alive cells
+        board.setCellLife(0, 0, Cell.ALIVE);
+        board.setCellLife(1, 0, Cell.ALIVE);
+        board.setCellLife(2, 0, Cell.ALIVE);
+        board.setCellLife(0, 1, Cell.ALIVE);
+        board.setCellLife(1, 1, Cell.ALIVE);
+        board.setCellLife(2, 1, Cell.ALIVE);
+        
+        System.out.println(board.toString());
+        
+        // Run the rules on the board
+        main.step();
+        Board newBoard = main.getBoard();
+        
+        System.out.println("\n" + newBoard.toString());
+        
+        // Check overpopulation deaths
+        assert newBoard.getCell(1, 1).isDead();
+        assert newBoard.getCell(1, 0).isDead();
+        
+        // Check growth
+        assert newBoard.getCell(1, 2).isAlive();
+        
+        // Check survival
+        assert newBoard.getCell(0, 0).isAlive();
+        assert newBoard.getCell(0, 1).isAlive();
+        assert newBoard.getCell(2, 0).isAlive();
+        assert newBoard.getCell(2, 1).isAlive();
     }
     
 }
