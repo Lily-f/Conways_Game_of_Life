@@ -42,7 +42,7 @@ public class Gui extends Application {
     /**
      * Initial height of game board
      */
-    private static final int DEFAULT_BOARD_SIZE = 20;
+    private static final int DEFAULT_BOARD_SIZE = 50;
     
     /**
      * Delay between steps for board animation
@@ -86,10 +86,8 @@ public class Gui extends Application {
         
         // Scale the cells to fit the size of the screen
         ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) ->{
-            double verticalMargin = board.getHeight()*2;
-            double horizontalMargin = board.getWidth()*2;
-            cellHeight = (primaryStage.getHeight() - MIN_MENU_HEIGHT - verticalMargin) / board.getHeight();
-            cellWidth = (primaryStage.getWidth() - horizontalMargin) / board.getWidth();
+            cellHeight = (primaryStage.getHeight() - MIN_MENU_HEIGHT) / board.getHeight() - 140.0/board.getHeight();
+            cellWidth = primaryStage.getWidth() / board.getWidth() - 100.0/board.getHeight();
             updateBoard();
         };
         
@@ -213,7 +211,7 @@ public class Gui extends Application {
                 cellsAlive = true;
             }
             else{
-                if(running)    cellBox.setStyle("-fx-fill: white; -fx-stroke: white; -fx-stroke-width: 1;");
+                if(running)    cellBox.setStyle("-fx-fill: white; -fx-stroke: lightgray; -fx-stroke-width: 1;");
                 else    cellBox.setStyle("-fx-fill: white; -fx-stroke: pink; -fx-stroke-width: 1;");
             }
             
