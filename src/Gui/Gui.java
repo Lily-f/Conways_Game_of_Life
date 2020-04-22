@@ -5,7 +5,6 @@ import Game.Cell;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
@@ -33,7 +32,7 @@ public class Gui extends Application {
     /**
      * Min height of the window
      */
-    private static final int MIN_WINDOW_HEIGHT = 70;
+    private static final int MIN_WINDOW_HEIGHT = 200;
     
     /**
      * Minimum height of menu bar
@@ -41,14 +40,9 @@ public class Gui extends Application {
     private static final int MIN_MENU_HEIGHT = 30;
     
     /**
-     * Size or gap between cells
-     */
-    private static final int CELL_MARGIN_SIZE = 1;
-    
-    /**
      * Initial height of game board
      */
-    private static final int DEFAULT_BOARD_SIZE = 10;
+    private static final int DEFAULT_BOARD_SIZE = 20;
     
     /**
      * Delay between steps for board animation
@@ -71,36 +65,33 @@ public class Gui extends Application {
     private boolean running = false;
     
     /**
-     * Size of cells on the grid
+     * Width of cells on gui
      */
-    private double cellSize = 15;
+    private double cellWidth;
+    
+    /**
+     * Height of cells on gui
+     */
+    private double cellHeight;
     
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage){
         // Format stage
         primaryStage.setTitle("Game of Life");
         primaryStage.getIcons().add(new Image("file:res/icon.png"));
         primaryStage.setResizable(true);
         primaryStage.setMinWidth(MIN_WINDOW_WIDTH);
         primaryStage.setMinHeight(MIN_WINDOW_HEIGHT);
-        
         primaryStage.setOnCloseRequest((e)->System.exit(0));
         
         // Scale the cells to fit the size of the screen
         ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) ->{
-            if(primaryStage.getHeight() - MIN_MENU_HEIGHT < primaryStage.getWidth()){
-                cellSize = (primaryStage.getHeight() - MIN_MENU_HEIGHT) / board.getHeight() - (board.getHeight() * CELL_MARGIN_SIZE);
-            }
-            else{
-                cellSize = primaryStage.getWidth() / board.getWidth() - (board.getWidth() * CELL_MARGIN_SIZE);
-                System.out.println();
-            }
+            double verticalMargin = board.getHeight()*2;
+            double horizontalMargin = board.getWidth()*2;
+            cellHeight = (primaryStage.getHeight() - MIN_MENU_HEIGHT - verticalMargin) / board.getHeight();
+            cellWidth = (primaryStage.getWidth() - horizontalMargin) / board.getWidth();
             updateBoard();
         };
-        primaryStage.widthProperty().addListener(stageSizeListener);
-        primaryStage.heightProperty().addListener(stageSizeListener);
-        
-        
         
         board = new Board(DEFAULT_BOARD_SIZE, DEFAULT_BOARD_SIZE);
         
@@ -113,11 +104,11 @@ public class Gui extends Application {
         // Populate and format panes
         rootPane.getChildren().addAll(menu, boardGrid);
         menu.setMinHeight(MIN_MENU_HEIGHT);
-        boardGrid.setVgap(CELL_MARGIN_SIZE);
-        boardGrid.setHgap(CELL_MARGIN_SIZE);
         setupGUIButtons(menu);
         createBoard();
-        
+    
+        primaryStage.widthProperty().addListener(stageSizeListener);
+        primaryStage.heightProperty().addListener(stageSizeListener);
         primaryStage.setScene(scene);
         primaryStage.show();
         updateBoard();
@@ -183,12 +174,10 @@ public class Gui extends Application {
     private void createBoard() {
         
         // Loop through each cell in the board, adding them to the grid
+        boardGrid.getChildren().removeAll();
         for(int y = 0; y < board.getHeight(); y ++){
             for(int x = 0; x < board.getWidth(); x ++){
-    
-                Rectangle cellBox = new Rectangle(0, 0, cellSize, cellSize);
-                if(board.getCell(x, y).isAlive())   cellBox.setFill(Color.BLACK);
-                else    cellBox.setFill(Color.WHITE);
+                Rectangle cellBox = new Rectangle(0, 0, cellWidth, cellHeight);
                 boardGrid.add(cellBox, x, y);
             }
         }
@@ -219,23 +208,21 @@ public class Gui extends Application {
             
             // Change cell color based of cell state
             if(board.getCell(x, y).isAlive()){
-                ((Rectangle)cellBox).setFill(Color.BLACK);
+                if(running)    cellBox.setStyle("-fx-fill: black; -fx-stroke: black; -fx-stroke-width: 1;");
+                else    cellBox.setStyle("-fx-fill: black; -fx-stroke: pink; -fx-stroke-width: 1;");
                 cellsAlive = true;
             }
-            else    ((Rectangle)cellBox).setFill(Color.WHITE);
+            else{
+                if(running)    cellBox.setStyle("-fx-fill: white; -fx-stroke: white; -fx-stroke-width: 1;");
+                else    cellBox.setStyle("-fx-fill: white; -fx-stroke: pink; -fx-stroke-width: 1;");
+            }
             
             // update size of cells if needed
-            if(cellSize != ((Rectangle) cellBox).getWidth()){
-                ((Rectangle) cellBox).setWidth(cellSize);
-                ((Rectangle) cellBox).setHeight(cellSize);
-            }
+            if(cellWidth != ((Rectangle) cellBox).getWidth())   ((Rectangle) cellBox).setWidth(cellWidth);
+            if(cellHeight != ((Rectangle) cellBox).getHeight())   ((Rectangle) cellBox).setHeight(cellHeight);
         }
         
         // Pause the game if no cells are alive
         if(!cellsAlive) running = false;
-        
-        // Show if game is paused
-        if(!running)    boardGrid.setStyle("-fx-background-color: #FFB0B0");
-        else    boardGrid.setStyle("-fx-background-color: #A0A0A0");
     }
 }
