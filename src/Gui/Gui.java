@@ -49,7 +49,7 @@ public class Gui extends Application {
     /**
      * Delay between steps for board animation
      */
-    private static final int STEP_DELAY = 200;
+    private Integer stepDelay = 200;
     
     /**
      * Game board
@@ -145,7 +145,7 @@ public class Gui extends Application {
                         board.step();
                         updateBoard();
                     }
-                }, 0, STEP_DELAY);
+                }, 0, stepDelay);
         });
         menu.add(runBtn, 1, 0);
         
@@ -171,7 +171,7 @@ public class Gui extends Application {
                     widthInput.setText("Width: " + boardSize.width);
                     createBoard();
                 }catch (NumberFormatException e){
-                    widthInput.setText("Enter numbers only!");
+                    widthInput.setText("Numbers only!");
                 }
             }
         });
@@ -186,11 +186,27 @@ public class Gui extends Application {
                     heightInput.setText("Height: " + boardSize.width);
                     createBoard();
                 }catch (NumberFormatException e){
-                    heightInput.setText("Enter numbers only!");
+                    heightInput.setText("Numbers only!");
                 }
             }
         });
         menu.add(heightInput, 5, 0);
+        
+        // Change animation speed
+        TextField stepDelayInput = new TextField("Enter delay here (ms)");
+        stepDelayInput.setOnKeyPressed(event -> {
+            if (event.getCode().equals(KeyCode.ENTER)){
+                try{
+                    stepDelay = Integer.parseInt(stepDelayInput.getText());
+                    stepDelay = Math.max(stepDelay, 50);
+                    stepDelayInput.setText("Delay(ms): " + stepDelay);
+                    running = false;
+                }catch (NumberFormatException e){
+                    stepDelayInput.setText("Numbers only!");
+                }
+            }
+        });
+        menu.add(stepDelayInput, 6, 0);
         
         // todo Load?
     }
