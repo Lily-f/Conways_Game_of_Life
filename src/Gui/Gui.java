@@ -6,9 +6,10 @@ import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -16,6 +17,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -42,7 +44,7 @@ public class Gui extends Application {
     /**
      * Initial height of game board
      */
-    private static final int DEFAULT_BOARD_SIZE = 50;
+    private final Dimension boardSize = new Dimension(60,60);
     
     /**
      * Delay between steps for board animation
@@ -86,12 +88,11 @@ public class Gui extends Application {
         
         // Scale the cells to fit the size of the screen
         ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) ->{
+            running = false;
             cellHeight = (primaryStage.getHeight() - MIN_MENU_HEIGHT) / board.getHeight() - 140.0/board.getHeight();
             cellWidth = primaryStage.getWidth() / board.getWidth() - 100.0/board.getHeight();
             updateBoard();
         };
-        
-        board = new Board(DEFAULT_BOARD_SIZE, DEFAULT_BOARD_SIZE);
         
         // Create Panes
         VBox rootPane = new VBox();
@@ -104,12 +105,12 @@ public class Gui extends Application {
         menu.setMinHeight(MIN_MENU_HEIGHT);
         setupGUIButtons(menu);
         createBoard();
+        setBoardListener();
     
         primaryStage.widthProperty().addListener(stageSizeListener);
         primaryStage.heightProperty().addListener(stageSizeListener);
         primaryStage.setScene(scene);
         primaryStage.show();
-        updateBoard();
     }
     
     /**
@@ -161,7 +162,35 @@ public class Gui extends Application {
         });
         menu.add(clearBtn, 3, 0);
         
-        // todo Change size
+        // Change board width field
+        TextField widthInput = new TextField("Enter width here");
+        widthInput.setOnKeyPressed(event -> {
+            if (event.getCode().equals(KeyCode.ENTER)){
+                try{
+                    boardSize.setSize(Integer.parseInt(widthInput.getText()), boardSize.height);
+                    widthInput.setText("Width: " + boardSize.width);
+                    createBoard();
+                }catch (NumberFormatException e){
+                    widthInput.setText("Enter numbers only!");
+                }
+            }
+        });
+        menu.add(widthInput, 4, 0);
+        
+        // Change board height field
+        TextField heightInput = new TextField("Enter height here");
+        heightInput.setOnKeyPressed(event -> {
+            if (event.getCode().equals(KeyCode.ENTER)){
+                try{
+                    boardSize.setSize(boardSize.width, Integer.parseInt(heightInput.getText()));
+                    heightInput.setText("Height: " + boardSize.width);
+                    createBoard();
+                }catch (NumberFormatException e){
+                    heightInput.setText("Enter numbers only!");
+                }
+            }
+        });
+        menu.add(heightInput, 5, 0);
         
         // todo Load?
     }
@@ -170,17 +199,23 @@ public class Gui extends Application {
      * Display the game cells onto the board
      */
     private void createBoard() {
+        board = new Board(boardSize.width, boardSize.height);
+        boardGrid.getChildren().removeAll(boardGrid.getChildren());
         
         // Loop through each cell in the board, adding them to the grid
-        boardGrid.getChildren().removeAll();
         for(int y = 0; y < board.getHeight(); y ++){
             for(int x = 0; x < board.getWidth(); x ++){
                 Rectangle cellBox = new Rectangle(0, 0, cellWidth, cellHeight);
                 boardGrid.add(cellBox, x, y);
             }
         }
-        
-        // Set clicked cells to alive
+        updateBoard();
+    }
+    
+    /**
+     * Sets Listener on board to toggle cell life on click
+     */
+    private void setBoardListener(){
         boardGrid.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             Node clickedNode = event.getPickResult().getIntersectedNode();
             if(clickedNode == null || clickedNode == boardGrid) return;
@@ -188,7 +223,6 @@ public class Gui extends Application {
             int y = GridPane.getRowIndex(clickedNode);
             if(board.getCell(x,y).isAlive()) board.setCellLife(x,y, Cell.DEAD);
             else board.setCellLife(x, y, Cell.ALIVE);
-            
             updateBoard();
         });
     }
